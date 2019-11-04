@@ -10,10 +10,49 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_04_163554) do
+ActiveRecord::Schema.define(version: 2019_11_04_195225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "challenges", force: :cascade do |t|
+    t.string "name"
+    t.string "url"
+    t.text "description"
+    t.string "inputs"
+    t.string "output"
+    t.string "examples"
+    t.string "hints"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.string "title"
+    t.string "comment"
+    t.integer "user_id"
+    t.string "commentable_type"
+    t.bigint "commentable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
+  end
+
+  create_table "solutions", force: :cascade do |t|
+    t.string "language"
+    t.text "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "challenge_id"
+    t.integer "user_id"
+  end
+
+  create_table "topics", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -23,6 +62,7 @@ ActiveRecord::Schema.define(version: 2019_11_04_163554) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "num_of_challenges"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
